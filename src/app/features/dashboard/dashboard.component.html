@@ -1,0 +1,17 @@
+<form novalidate [formGroup]="user" (ngSubmit)="login()">
+    <label class="h2">Email</label>
+<input type="email"formControlName="correo">
+    <label class="h2">Contraseña</label>
+<input type="password"formControlName="contraseña"> <i class="bi bi-eye"></i>
+<button class="btn btn-danger">Ingresar</button>
+</form>
+
+<div class="background">
+  <h1>Welcome to the NgBytes Dashboard</h1>
+  <h2>Built with &lt;3 by Dottech</h2>
+
+  <a target="_blank" class="btn" href="https://github.com/puntotech/ngbytes-fireauth">
+    Click here to view the source code
+  </a>
+
+</div>

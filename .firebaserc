@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "angular-fire-50d12": {
+      "hosting": {
+        "prueba": [
+          "angular-fire-50d12"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "angular-fire-50d12"
+  }
+}
