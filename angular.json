@@ -27,12 +27,15 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
-                         
+                ,"src/app/pages/home/home.component.css"         
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js" 
+              ,"src/app/pages/home/home.js"         
+
+              
             ]
           },
           "configurations": {

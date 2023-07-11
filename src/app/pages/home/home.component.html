@@ -2,40 +2,54 @@
 <header><app-first-menu></app-first-menu></header>
 
 
-  <div style="padding-top:20px" >
+  
+
+  
+  <body>
+  
+    <div id="container"></div>
+    <script id="template"></script>
+    <div class="flip-card" (click)="toggleCard()">{{ isFlipped ? 'Reset' : 'Animate' }}</div>
     
-  <div class="card" style="width: 18rem; margin: 0 auto;">           
-    <div class="card-header">
-      Datos
-    </div>
-    <form>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">Nombre <br><input type="text"></li>
-      <li class="list-group-item">Carrera 
-        <select class="form-select" aria-label="Default select example">
-            <option selected>Selecciona tu carrera</option>
-            <option value="1">Pedagogía</option>
-            <option value="2">Ingieria en Sistemas Computacionales</option>
-            <option value="3">Psicología</option>
-          </select>
-      </li>
-      <li class="list-group-item">¿Llevas inglés en tu carrera?</li>
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-        <label class="form-check-label" for="flexSwitchCheckChecked">Si/no</label>
 
-
-        <li class="list-group-item">Nivel de ingles  
-          <select class="form-select" aria-label="Default select example">
-              <option selected>Selecciona tu nivel de dominio de ingles</option>
-              <option value="1">Ninguno</option>
-              <option value="2">Basico</option>
-              <option value="3">Intermedio</option>
-              <option value ="4">Avanzado</option>
-            </select>
-        </li>
-
+    <div class="contact-wrapper" [class.active]="isFlipped">
+      <div class="envelope">
+        <div class="back paper"></div>
+        <div class="content">
+          <div class="form-wrapper">
+            <form>
+              <div class="top-wrapper">
+                <div class="input">
+                  <label>Name</label>
+                  <input type="text" name="name" [value]="name" />
+                </div>
+                <div class="input">
+                  <label>Phone</label>
+                  <input type="text" name="phone" [value]="phone" />
+                </div>
+                <div class="input">
+                  <label>Email</label>
+                  <input type="text" name="_replyto" [value]="email" />
+                </div>
+              </div>
+              <div class="bottom-wrapper">
+                <div class="input">
+                  <label>Subject</label>
+                  <input type="text" name="_subject" [value]="subject" />
+                </div>
+                <div class="input">
+                  <label>Message</label>
+                  <textarea rows="5" name="message" [value]="message"></textarea>
+                </div>
+                <div class="submit">
+                  <div class="submit-card" (click)="sendMail()">Send Mail</div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-    </ul>
-    </form>
-  </div>
+    </div>
+
+  </body>
+  
