@@ -9,11 +9,15 @@ import { Router, ActivatedRoute, NavigationExtras} from '@angular/router';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
-  user!:FormGroup
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router, private route: ActivatedRoute ){}
-  ngOnInit(){
-    this.createform();
-  } 
+ 
+  user!:FormGroup;
+  fail = false;
+  constructor(private formBuilder: FormBuilder, 
+    private authService: AuthService, 
+    private router: Router, private route: ActivatedRoute ){}
+ ngOnInit(){
+  this.createform()
+ }
   createform(){
     this.user=new FormGroup({
       correo:new FormControl("",Validators.email),
@@ -27,22 +31,34 @@ export class DashboardComponent {
       email : email,
       password: password
     }
-    this.authService.login(data).then(result=>{
-      console.log('este es el resultado -->', result)
-      console.log('este es UID->',result.user.uid)
-      const  uid : NavigationExtras ={
-        queryParams:{
-          uid: result.user.uid
-        }
-      }
-      this.router.navigate(['home'], uid);
+    // this.authService.login(data).then(result=>{
+    //   console.log('este es el resultado -->', result)
+    //   console.log('este es UID->',result.user.uid)
+    //   const  uid : NavigationExtras ={
+    //     queryParams:{
+    //       uid: result.user.uid
+    //     }
+    //   }
+    //   this.router.navigate(['home'], uid);
 
 
 
-    }).catch(error=>{
-      console.error('error en login -->', error)
-    })
+    // }).catch(error=>{
+    //   console.error('error en login -->', error)
+    // })
+   this.authService.login(data).then(result =>{
+    console.log('este es el resultado->',result.user.uid)
     
+    const uid : NavigationExtras = {
+      queryParams:{
+        uid: result.user.uid
+      }
+    }
+    this.router.navigate(['home'], uid)
+   }).catch(error=>{
+this.fail=true;
+    alert('No se pudo ingresar');
+   })
   }
 
 

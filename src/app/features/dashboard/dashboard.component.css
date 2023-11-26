@@ -48,3 +48,7 @@ h1 {
   .btn:hover {
     background-color: #52b7c0;
   }
+  .etiqueta{
+    color:blue;
+    font-size: 80px;
+  }

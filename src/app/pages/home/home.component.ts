@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-
-
+import { DatabaseFirebaseService } from 'src/app/services/database-firebase.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -19,7 +18,9 @@ export class HomeComponent {
   email: string = '';
   subject: string = '';
   message: string = '';
+constructor(private databaseFirebaseService: DatabaseFirebaseService){
 
+}
   toggleCard() {
     this.isFlipped = !this.isFlipped;
   }
@@ -29,18 +30,4 @@ export class HomeComponent {
     console.log('Enviando correo...');
   }
   
-}
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-
-@NgModule({
-  imports: [
-    // Otros módulos importados
-    FormsModule
-  ],
-  // Otros metadatos del módulo
-})
-export class AppModule { 
-
-
 }
