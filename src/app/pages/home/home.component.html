@@ -1,57 +1,93 @@
-
 <header><app-first-menu></app-first-menu></header>
-
+<div style="padding: 30px; background-image: url(https://overflow.pe/wp-content/uploads/2023/05/reparacion-de-computadoras-como-negocio.jpg); background-size: cover; background-position: center;"></div>
 <div style="padding: 30px;">
-  <a mat-list-item  *ngFor="let link of jobsArray"> {{ link }} </a>
-
 </div>
-  <button (click)="addJob()">Agregar Job</button>
-  
-  <body *ngIf="newJob">
-  
-    <div id="container"></div>
-    <script id="template"></script>
-    <div class="flip-card" (click)="toggleCard()">{{ isFlipped ? 'Reset' : 'Animate' }}</div>
-    
+<button class="btn btn-info btn-lg btn-block" (click)="addJob()" style="margin-left: 1cm; color: white;">Registro de nuevo equipo</button>
 
-    <div class="contact-wrapper" [class.active]="isFlipped">
-      <div class="envelope">
-        <div class="back paper"></div>
-        <div class="content">
-          <div class="form-wrapper">
-            <form  novalidate [formGroup]="jobs" (ngSubmit)="setJob()">
-              <div class="top-wrapper">
+<body *ngIf="newJob">
+
+  <div id="container"></div>
+  <script id="template"></script>
+  <div class="flip-card" (click)="toggleCard()">{{ isFlipped ? 'Reset' : 'Animate' }}</div>
+
+  <div class="contact-wrapper" [class.active]="isFlipped">
+    <div class="envelope">
+      <div class="back paper"></div>
+      <div class="content">
+        <div class="form-wrapper">
+          <form novalidate [formGroup]="jobs" (ngSubmit)="setJob()">
+            <div class="top-wrapper">
+              <div class="input">
+                <style>
+                  .input label,
+                  .input input {
+                    color: rgb(255, 255, 255);
+                    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+                    /* cambio de color general y de estilo a todos los títulos */
+                  }
+                </style>
+                <label style="color: rgb(255, 166, 0); text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); font-size: 25px;">Nombre</label>
+                <input type="text" name="name" [value]="name" formControlName="name" />
+              </div>
+              <div class="input">
+                <label style="font-size: 20px;">Número del cliente</label>
+                <input type="text" name="phone" [value]="phone" formControlName="phone" />
+              </div>
+              <div class="input">
+                <label style="font-size: 20px;">Correo del cliente</label>
+                <input type="text" name="_replyto" [value]="email" formControlName="email" />
+              </div>
+            </div>
+            <div class="bottom-wrapper">
+              <div class="input">
+                <label style="font-size: 20px; margin-top: 1cm;">Trabajo a realizar en el equipo</label>
                 <div class="input">
-                  <label>Name</label>
-                  <input type="text" name="name" [value]="name"  formControlName = "name"/>
-                </div>
-                <div class="input">
-                  <label>Phone</label>
-                  <input type="text" name="phone" [value]="phone" formControlName = "phone"/>
-                </div>
-                <div class="input">
-                  <label>Email</label>
-                  <input type="text" name="_replyto" [value]="email" formControlName = "email" />
+
+                  <div style="margin-top: 0.5cm;">
+                    <input type="checkbox" id="opcion1" name="_subject" value="Diagnóstico del equipo" formControlName="subject" style="border-radius: 5px; margin-right: 5px;">
+                    <label for="opcion1" style="border-radius: 5px; padding: 5px; background-color: rgba(10, 99, 233, 0.308); box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);">Diagnóstico del equipo</label>
+                  </div>
+                  <div style="margin-top: 0.5cm;">
+                    <input type="checkbox" id="opcion2" name="_subject" value="Mantenimiento preventivo" formControlName="subject" style="border-radius: 5px; margin-right: 5px;">
+                    <label for="opcion2" style="border-radius: 5px; padding: 5px; background-color: rgba(10, 99, 233, 0.308); box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);">Mantenimiento preventivo</label>
+                  </div>
+                  <div style="margin-top: 0.5cm;">
+                    <input type="checkbox" id="opcion3" name="_subject" value="Optimizacion de equipo" formControlName="subject" style="border-radius: 50%; margin-right: 5px;">
+                    <label for="opcion3" style="border-radius: 5px; padding: 5px; background-color: rgba(10, 99, 233, 0.308); box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);">Optimizacion de equipo</label>
+                  </div>
+                  <div style="margin-top: 0.5cm;">
+                    <input type="checkbox" id="opcion4" name="_subject" value="Resintalacion de sistema" formControlName="subject" style="border-radius: 50%; margin-right: 5px;">
+                    <label for="opcion4" style="border-radius: 5px; padding: 5px; background-color: rgba(10, 99, 233, 0.308); box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);">Resintalacion de sistema</label>
+                  </div>
                 </div>
               </div>
-              <div class="bottom-wrapper">
-                <div class="input">
-                  <label>Subject</label>
-                  <input type="text" name="_subject" [value]="subject"  formControlName = "subject"/>
-                </div>
-                <div class="input">
-                  <label>Message</label>
-                  <textarea rows="5" name="message" [value]="message" formControlName = "message" ></textarea>
-                </div>
-                <div class="submit">
-                  <div class="submit-card"  (click)="setJob()">Send Mail</div>
-                </div>
+              <div class="input">
+                <label style="font-size: 20px;">Características físicas del equipo</label>
+                <textarea rows="5" name="message" [value]="message" formControlName="message"></textarea>
               </div>
-            </form>
-          </div>
+              <div style="margin-top: 0.2cm;">
+                <label for="imageInput" style="font-size: 20px;">Subir imágenes:</label>
+                <input type="file" id="imageInput" name="images" accept="image/*" multiple (change)="handleImageChange($event)">
+              </div>
+
+              <!-- Visualización de imágenes cargadas -->
+              <div *ngIf="images.length > 0" style="margin-top: 0.5cm;">
+                <p>Imágenes cargadas:</p>
+                <div *ngFor="let image of images">
+                  <img [src]="getImageSrc(image)" alt="Imagen">
+                </div>
+                <button (click)="cancelImageUpload()">Cancelar carga de imágenes</button>
+              </div>
+
+              <div class="submit" style="margin-top: 1cm;">
+                <div class="submit-card" (click)="setJob()">Send Mail</div>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
+  </div>
+</body>
 
-  </body>
   
