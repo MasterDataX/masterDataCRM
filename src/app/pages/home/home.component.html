@@ -30,7 +30,7 @@
                 <input type="text" name="name" [value]="name" formControlName="name" />
               </div>
               <div class="input">
-                <label style="font-size: 20px;">Número del cliente</label>
+                <label style="font-size: 20px;">Número telefónico del cliente</label>
                 <input type="text" name="phone" [value]="phone" formControlName="phone" />
               </div>
               <div class="input">
@@ -39,28 +39,18 @@
               </div>
             </div>
             <div class="bottom-wrapper">
-              <div class="input">
+              <!-- <div class="input">
                 <label style="font-size: 20px; margin-top: 1cm;">Trabajo a realizar en el equipo</label>
-                <div class="input">
-
-                  <div style="margin-top: 0.5cm;">
-                    <input type="checkbox" id="opcion1" name="_subject" value="Diagnóstico del equipo" formControlName="subject" style="border-radius: 5px; margin-right: 5px;">
-                    <label for="opcion1" style="border-radius: 5px; padding: 5px; background-color: rgba(10, 99, 233, 0.308); box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);">Diagnóstico del equipo</label>
-                  </div>
-                  <div style="margin-top: 0.5cm;">
-                    <input type="checkbox" id="opcion2" name="_subject" value="Mantenimiento preventivo" formControlName="subject" style="border-radius: 5px; margin-right: 5px;">
-                    <label for="opcion2" style="border-radius: 5px; padding: 5px; background-color: rgba(10, 99, 233, 0.308); box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);">Mantenimiento preventivo</label>
-                  </div>
-                  <div style="margin-top: 0.5cm;">
-                    <input type="checkbox" id="opcion3" name="_subject" value="Optimizacion de equipo" formControlName="subject" style="border-radius: 50%; margin-right: 5px;">
-                    <label for="opcion3" style="border-radius: 5px; padding: 5px; background-color: rgba(10, 99, 233, 0.308); box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);">Optimizacion de equipo</label>
-                  </div>
-                  <div style="margin-top: 0.5cm;">
-                    <input type="checkbox" id="opcion4" name="_subject" value="Resintalacion de sistema" formControlName="subject" style="border-radius: 50%; margin-right: 5px;">
-                    <label for="opcion4" style="border-radius: 5px; padding: 5px; background-color: rgba(10, 99, 233, 0.308); box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);">Resintalacion de sistema</label>
-                  </div>
+                </div> -->
+                <div style="margin-top: 0.5cm;">
+                  <label for="subject">Trabajo a realizar en el equipo:</label>
+                  <select id="subject" formControlName="subject" style="border-radius: 5px; padding: 5px; background-color: rgba(10, 99, 233, 0.308); box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);">
+                    <option value="Diagnóstico del equipo">Diagnóstico del equipo</option>
+                    <option value="Mantenimiento preventivo">Mantenimiento preventivo</option>
+                    <option value="Optimizacion de equipo">Optimizacion de equipo</option>
+                    <option value="Resintalacion de sistema">Resintalacion de sistema</option>
+                  </select>
                 </div>
-              </div>
               <div class="input">
                 <label style="font-size: 20px;">Características físicas del equipo</label>
                 <textarea rows="5" name="message" [value]="message" formControlName="message"></textarea>
@@ -71,16 +61,10 @@
               </div>
 
               <!-- Visualización de imágenes cargadas -->
-              <div *ngIf="images.length > 0" style="margin-top: 0.5cm;">
-                <p>Imágenes cargadas:</p>
-                <div *ngFor="let image of images">
-                  <img [src]="getImageSrc(image)" alt="Imagen">
-                </div>
-                <button (click)="cancelImageUpload()">Cancelar carga de imágenes</button>
-              </div>
+              
 
               <div class="submit" style="margin-top: 1cm;">
-                <div class="submit-card" (click)="setJob()">Send Mail</div>
+                <div class="submit-card" (click)="setJob()">Agregar</div>
               </div>
             </div>
           </form>
@@ -88,6 +72,34 @@
       </div>
     </div>
   </div>
+  <!-- home.component.html -->
+
+  
 </body>
+
+<!-- home.component.html -->
+
+<div *ngFor="let reporte of reportes" 
+     class="elemento-lista" 
+     [class.elemento-activo]="reporte === elementoActivo" 
+     (click)="activarElemento(reporte); mostrarDetalles(reporte)">
+  <h4>{{ reporte.subject }}</h4>
+  <p>{{ reporte.name }}</p>
+  <button class="btn btn-info btn-lg btn-block"  (click)="mostrarDetalles(reporte)">Mostrar Detalles</button>
+</div>
+
+<div id="detalles" [class.visible]="detallesVisible">
+  <h2>Detalles del Reporte</h2>
+  <div class="detalle-card">
+    <p><strong>Subject:</strong> {{ reporteSeleccionado?.subject }}</p>
+    <p><strong>Name:</strong> {{ reporteSeleccionado?.name }}</p>
+    <p><strong>Descripción:</strong> {{ reporteSeleccionado?.message }}</p>
+    <p><strong>telefono:</strong> {{ reporteSeleccionado?.phone }}</p>
+  <a href="{{reporteSeleccionado?.images}}"> <img style="height: 40px; width: 40px;"  src=".../../../../../assets/icons/image-picture-svgrepo-com.svg"/></a>
+   <br>
+    <!-- Agrega aquí cualquier otro detalle que desees mostrar -->
+    <button class="btn btn-info btn-lg btn-block"  (click)="ocultarDetalles()">Ocultar Detalles</button>
+  </div>
+</div>
 
   

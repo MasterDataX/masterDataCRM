@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { DatabaseFirebaseService } from 'src/app/services/database-firebase.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { finalize } from 'rxjs/operators';
+import { ImageUploadServiceService } from 'src/app/services/image-upload-service.service';
+import { Router, ActivatedRoute, NavigationExtras} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -8,6 +12,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
+  elementoActivo: any;
+  detallesVisible: boolean = false;
+  reporteSeleccionado: any;
   jobs!: FormGroup;
   isFlipped: boolean = false;
   name: string = '';
@@ -18,12 +25,20 @@ export class HomeComponent {
   newJob = false;
   jobsArray: any = [];
   images: File[] = [];
-
-  constructor(private databaseFirebaseService: DatabaseFirebaseService) {}
+  uuid: any;
+  reportes:any=[]
+  constructor(
+    private databaseFirebaseService: DatabaseFirebaseService,
+    private imageUploadService: ImageUploadServiceService,
+    private storage: AngularFireStorage,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     this.getData();
     this.createForm();
+   this.uuid= this.route.snapshot.queryParamMap.get('uuid')
+    
   }
 
   addJob() {
@@ -33,7 +48,7 @@ export class HomeComponent {
   createForm() {
     this.jobs = new FormGroup({
       name: new FormControl(''),
-      phone: new FormControl(Number),
+      phone: new FormControl(''),
       email: new FormControl('', Validators.email),
       subject: new FormControl(''),
       message: new FormControl('')
@@ -50,40 +65,97 @@ export class HomeComponent {
   }
 
   getData() {
-    this.databaseFirebaseService.getDoc('reportes', '000001').subscribe((result: any) => {
-      console.log('Este es Prueba', result);
-      const name = result.name;
-      this.jobsArray.push(name);
-    });
+    this.databaseFirebaseService.getAllDocs('reportes').subscribe((result:any)=>{
+      console.log(result)
+      result.map((data:any)=>{
+        this.reportes.push(data)
+      })
+    })
   }
 
   setJob() {
+    this.uuid= this.route.snapshot.queryParamMap.get('uid')
     const data = {
       name: this.jobs.value.name,
       phone: this.jobs.value.phone,
       email: this.jobs.value.email,
       subject: this.jobs.value.subject,
-      message: this.jobs.value.message
+      message: this.jobs.value.message, 
+      employment: this.uuid
     };
-
-    // Agrega la lógica para enviar la información y las imágenes
-    console.log('Enviando información y imágenes:', data, this.images);
-    this.databaseFirebaseService.createDoc(data, 'reportes', '000001');
+  
+    this.databaseFirebaseService.createDoc(data, 'reportes')
+  .then((docRef: any) => {
+    if (docRef && docRef.id) {
+      const docId = docRef.id;
+      this.uploadImages(docId);
+      this.newJob = false;
+      alert('Registrado correctamente')
+    } else {
+      console.error('La referencia al documento es undefined o no tiene una propiedad "id".', docRef);
+    }
+  })
+  .catch((error) => {
+    console.error('Error al crear el documento:', error);
+  });
   }
+  
+
+  uploadImages(docId: string) {
+    if (this.images.length === 0) {
+      // No hay imágenes para cargar
+      console.log('No hay imágenes para cargar.');
+      return;
+    }
+  
+    const imagePromises: Promise<string>[] = [];
+  
+    // Iterar sobre las imágenes y cargar cada una
+    this.images.forEach((image: File) => {
+      const filePath = `/images/${docId}/${image.name}`;
+      const uploadTask = this.storage.upload(filePath, image);
+  
+      // Get notified when the download URL is available
+      const downloadURL$ = uploadTask.then(snapshot => snapshot.ref.getDownloadURL());
+  
+      // Add the promise to the array
+      imagePromises.push(downloadURL$);
+    });
+  
+    // When all images are uploaded, save the URLs in your database
+    Promise.all(imagePromises)
+      .then(imageURLs => {
+        console.log('URLs de imágenes cargadas:', imageURLs);
+  
+        // Do something with the URLs, e.g., save them in your database
+        const imageData = {
+          images: imageURLs
+        };
+  
+        this.databaseFirebaseService.updateDoc(imageData, 'reportes', docId);
+      })
+      .catch(error => {
+        console.error('Error al cargar imágenes:', error);
+      });
+  }
+  
+  
 
   handleImageChange(event: any) {
-    this.images = event.target.files;
+    this.images = Array.from(event.target.files);
+  }
+  activarElemento(reporte: any) {
+    this.elementoActivo = reporte;
   }
 
-  cancelImageUpload() {
-    this.images = [];
+  mostrarDetalles(reporte: any) {
+    this.detallesVisible = true;
+    this.reporteSeleccionado = reporte;
   }
 
-  getImageSrc(image: File): string {
-    const imageUrl = URL.createObjectURL(image);
-    const thumbnailSize = '5cm';
-
-    return `<img src="${imageUrl}" alt="Imagen" style="width: ${thumbnailSize}; height: ${thumbnailSize};">`;
+  ocultarDetalles() {
+    this.detallesVisible = false;
+    this.elementoActivo = null;
+    this.reporteSeleccionado = null;
   }
 }
-
