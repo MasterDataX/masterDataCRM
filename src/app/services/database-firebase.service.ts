@@ -12,6 +12,8 @@ export class DatabaseFirebaseService {
     return collection.doc(id).set(data);
   }
   //Muestra documento en firebase
+
+//Este es un nuevo commit
   getDoc<tipo>(path: string, id:string){
     const collection = this.firestore.collection<tipo>(path);
     return collection.doc(id).valueChanges();
