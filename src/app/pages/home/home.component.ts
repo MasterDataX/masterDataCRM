@@ -1,21 +1,39 @@
 import { Component } from '@angular/core';
 import { DatabaseFirebaseService } from 'src/app/services/database-firebase.service';
 import { FormGroup,FormControl,Validators,FormBuilder, FormControlDirective, } from '@angular/forms';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { finalize } from 'rxjs/operators';
+import { ImageUploadServiceService } from 'src/app/services/image-upload-service.service';
+import { Router, ActivatedRoute, NavigationExtras} from '@angular/router';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  
+  elementoActivo: any;
+  detallesVisible: boolean = false;
+  reporteSeleccionado: any;
+  jobs!: FormGroup;
   isFlipped: boolean = false;
-  
-  jobs!:FormGroup;
+  name: string = '';
+  phone: string = '';
+  email: string = '';
+  subject: string = '';
+  message: string = '';
   newJob = false;
-  listJobs:any =[]
-constructor(private database: DatabaseFirebaseService){
+  jobsArray: any = [];
+  images: File[] = [];
+  uuid: any;
+  reportes:any=[]
+  constructor(
+    private databaseFirebaseService: DatabaseFirebaseService,
+    private imageUploadService: ImageUploadServiceService,
+    private storage: AngularFireStorage,
+    private route: ActivatedRoute
+  ) {}
 
-}
 ngOnInit(){
   this.createForm();
   this.getData()
