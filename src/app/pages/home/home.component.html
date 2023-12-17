@@ -1,59 +1,103 @@
-
 <header><app-first-menu></app-first-menu></header>
+<div style="padding: 30px; background-image: url(https://overflow.pe/wp-content/uploads/2023/05/reparacion-de-computadoras-como-negocio.jpg); background-size: cover; background-position: center;"></div>
+<div style="padding: 30px;">
+</div>
+<button class="btn btn-info btn-lg btn-block" (click)="addJob()" style="margin-left: 1cm; color: white;">Registro de nuevo equipo</button>
 
+<body *ngIf="newJob">
 
-  
+  <div id="container"></div>
+  <script id="template"></script>
+  <div class="flip-card" (click)="toggleCard()">{{ isFlipped ? 'Reset' : 'Animate' }}</div>
 
-  
-  <body>
-
-    <button (click)="addJob()"> Agregar trabajo</button>
-  
-    <div id="container"></div>
-    <script id="template"></script>
-    <div class="flip-card" (click)="toggleCard()">{{ isFlipped ? 'Reset' : 'Animate' }}</div>
-    
-    <a>{{listJobs[0]}}</a>
-    <div *ngIf="newJob===true" class="contact-wrapper" [class.active]="isFlipped">
-      
-      <div class="envelope">
-        <div class="back paper"></div>
-        <div class="content">
-          <div class="form-wrapper">
-            <button (click)="closeAddJob()" type="button" class="btn btn-danger">X</button>
-            <form novalidate [formGroup]="jobs" (ngSubmit)="setData()">
-              <div class="top-wrapper">
-                <div class="input">
-                  <label>Name</label>
-                  <input type="text" name="name" formControlName="name" placeholder="Pedro Paramo" />
-                </div>
-                <div class="input">
-                  <label>Phone</label>
-                  <input type="text" name="phone" formControlName="phone" />
-                </div>
-                <div class="input">
-                  <label>Email</label>
-                  <input type="text" name="_replyto" formControlName="email"/>
-                </div>
+  <div class="contact-wrapper" [class.active]="isFlipped">
+    <div class="envelope">
+      <div class="back paper"></div>
+      <div class="content">
+        <div class="form-wrapper">
+          <form novalidate [formGroup]="jobs" (ngSubmit)="setJob()">
+            <div class="top-wrapper">
+              <div class="input">
+                <style>
+                  .input label,
+                  .input input {
+                    color: rgb(255, 255, 255);
+                    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+                    /* cambio de color general y de estilo a todos los títulos */
+                  }
+                </style>
+                <label style="color: rgb(255, 166, 0); text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); font-size: 25px;">Nombre</label>
+                <input type="text" name="name" [value]="name" formControlName="name" />
               </div>
-              <div class="bottom-wrapper">
-                <div class="input">
-                  <label>Subject</label>
-                  <input type="text" name="_subject" formControlName="subject" />
-                </div>
-                <div class="input">
-                  <label>Message</label>
-                  <textarea rows="5" name="message" formControlName="message" ></textarea>
-                </div>
-                <div class="submit">
-                  <div class="submit-card" (click)="setData()">Send Mail</div>
-                </div>
+              <div class="input">
+                <label style="font-size: 20px;">Número telefónico del cliente</label>
+                <input type="text" name="phone" [value]="phone" formControlName="phone" />
               </div>
-            </form>
-          </div>
+              <div class="input">
+                <label style="font-size: 20px;">Correo del cliente</label>
+                <input type="text" name="_replyto" [value]="email" formControlName="email" />
+              </div>
+            </div>
+            <div class="bottom-wrapper">
+              <!-- <div class="input">
+                <label style="font-size: 20px; margin-top: 1cm;">Trabajo a realizar en el equipo</label>
+                </div> -->
+                <div style="margin-top: 0.5cm;">
+                  <label for="subject">Trabajo a realizar en el equipo:</label>
+                  <select id="subject" formControlName="subject" style="border-radius: 5px; padding: 5px; background-color: rgba(10, 99, 233, 0.308); box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);">
+                    <option value="Diagnóstico del equipo">Diagnóstico del equipo</option>
+                    <option value="Mantenimiento preventivo">Mantenimiento preventivo</option>
+                    <option value="Optimizacion de equipo">Optimizacion de equipo</option>
+                    <option value="Resintalacion de sistema">Resintalacion de sistema</option>
+                  </select>
+                </div>
+              <div class="input">
+                <label style="font-size: 20px;">Características físicas del equipo</label>
+                <textarea rows="5" name="message" [value]="message" formControlName="message"></textarea>
+              </div>
+              <div style="margin-top: 0.2cm;">
+                <label for="imageInput" style="font-size: 20px;">Subir imágenes:</label>
+                <input type="file" id="imageInput" name="images" accept="image/*" multiple (change)="handleImageChange($event)">
+              </div>
+
+              <!-- Visualización de imágenes cargadas -->
+              
+
+              <div class="submit" style="margin-top: 1cm;">
+                <div class="submit-card" (click)="setJob()">Agregar</div>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
+  </div>
+  <!-- home.component.html -->
 
-  </body>
   
+</body>
+
+<!-- home.component.html -->
+
+<div *ngFor="let reporte of reportes" 
+     class="elemento-lista" 
+     [class.elemento-activo]="reporte === elementoActivo" 
+     (click)="activarElemento(reporte); mostrarDetalles(reporte)">
+  <h4>{{ reporte.subject }}</h4>
+  <p>{{ reporte.name }}</p>
+  <button class="btn btn-info btn-lg btn-block"  (click)="mostrarDetalles(reporte)">Mostrar Detalles</button>
+</div>
+
+<div id="detalles" [class.visible]="detallesVisible">
+  <h2>Detalles del Reporte</h2>
+  <div class="detalle-card">
+    <p><strong>Subject:</strong> {{ reporteSeleccionado?.subject }}</p>
+    <p><strong>Name:</strong> {{ reporteSeleccionado?.name }}</p>
+    <p><strong>Descripción:</strong> {{ reporteSeleccionado?.message }}</p>
+    <p><strong>telefono:</strong> {{ reporteSeleccionado?.phone }}</p>
+  <a href="{{reporteSeleccionado?.images}}"> <img style="height: 40px; width: 40px;"  src=".../../../../../assets/icons/image-picture-svgrepo-com.svg"/></a>
+   <br>
+    <!-- Agrega aquí cualquier otro detalle que desees mostrar -->
+    <button class="btn btn-info btn-lg btn-block"  (click)="ocultarDetalles()">Ocultar Detalles</button>
+  </div>
+</div>
