@@ -11,6 +11,7 @@ import { provideAuth,getAuth } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularMaterialModule } from 'src/shared/angular-material/angular-material.module';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
+import { PerfilComponent } from './Formulario.perfil/perfil/perfil.component';
 
 
 
@@ -18,6 +19,7 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
   declarations: [
     AppComponent,
     HeroesComponent,
+    PerfilComponent,
   ],
   imports: [
     BrowserModule,
